@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.vilt-group.minium</groupId>
+        <artifactId>minium</artifactId>
+        <version>0.9.4-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>minium-test</artifactId>
+    <packaging>pom</packaging>
+    <name>Minium - Test</name>
+
+    <modules>
+        <module>minium-cucumber-rhino</module>
+        <module>minium-cucumber-rhino-archetype</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>info.cukes</groupId>
+                <artifactId>cucumber-rhino</artifactId>
+                <version>1.1.5</version>
+            </dependency>
+            <dependency>
+                <groupId>info.cukes</groupId>
+                <artifactId>cucumber-junit</artifactId>
+                <version>1.1.5</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    
+</project>

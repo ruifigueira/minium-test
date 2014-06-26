@@ -103,12 +103,9 @@ public class MiniumCucumber extends ParentRunner<FeatureRunner> {
 
         ResourceLoader resourceLoader = new MultiLoader(classLoader);
 
-        String expectjsFile = MiniumCucumber.class.getClassLoader().getResource("modules/expect.js").toExternalForm();
-        String internalModulesUrl = expectjsFile.substring(0, expectjsFile.lastIndexOf("/"));
-
         cx = Context.enter();
         scope = new Global(cx);
-        scope.installRequire(cx, Lists.newArrayList(internalModulesUrl, "src/test/resources/modules"), false);
+        scope.installRequire(cx, Lists.newArrayList(getInternalModulesUrl(), "src/test/resources/modules"), false);
         new MiniumContextLoader(classLoader).load(cx, scope);
 
         backend = new MiniumBackend(resourceLoader, cx, scope);
@@ -183,6 +180,14 @@ public class MiniumCucumber extends ParentRunner<FeatureRunner> {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
+    }
+
+    protected String getInternalModulesUrl() {
+        // we cannot get a folder as a resource from classpath, so we get a file inside it and then get the corresponding
+        // folder URL
+        String expectjsFile = MiniumCucumber.class.getClassLoader().getResource("modules/expect.js").toExternalForm();
+        String internalModulesUrl = expectjsFile.substring(0, expectjsFile.lastIndexOf("/"));
+        return internalModulesUrl;
     }
 
     private Object getVal(JsVariable jsVariable, Class<?> clazz, Object object) {

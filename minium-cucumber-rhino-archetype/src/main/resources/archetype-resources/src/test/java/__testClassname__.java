@@ -1,4 +1,7 @@
-package test;
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+package ${package};
 
 import org.junit.runner.RunWith;
 import org.mozilla.javascript.Scriptable;
@@ -13,11 +16,11 @@ import cucumber.api.CucumberOptions;
 
 @RunWith(MiniumCucumber.class)
 @CucumberOptions(
-        format = { "html:target/cucumber-html-report",  "json:target/google-search-results.json" },
-        glue   = { "classpath:cucumber/runtime/minium", "classpath:test" }
+        format = { "pretty", "html:target/cucumber-html-report",  "json:target/cucumber-json-report.json" },
+        glue   = { "classpath:cucumber/runtime/minium", "classpath:${packageInPathFormat}" }
 )
 @ContextConfiguration(classes = TestConfig.class)
-public class GoogleSearchTest {
+public class ${testClassname} {
 
     @Autowired
     @JsVariable("wd")

@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    
-     <parent>
+
+    <parent>
         <groupId>com.vilt-group.minium</groupId>
         <artifactId>minium-test</artifactId>
         <version>0.9.4-SNAPSHOT</version>
@@ -9,6 +9,10 @@
 
     <artifactId>minium-script-jasmine-archetype</artifactId>
     <name>Minium - Cucumber Rhino Archetype</name>
+
+    <properties>
+        <skipTests>true</skipTests>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -22,5 +26,17 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
+    <profiles>
+        <profile>
+            <id>test-archetype-generation</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <skipTests>false</skipTests>
+            </properties>
+        </profile>
+    </profiles>
+
 </project>

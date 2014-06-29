@@ -11,6 +11,10 @@
     <artifactId>minium-script-cucumber-archetype</artifactId>
     <name>Minium - Cucumber Rhino Archetype</name>
 
+    <properties>
+        <skipTests>true</skipTests>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>
@@ -23,5 +27,17 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    
+    <profiles>
+        <profile>
+            <id>test-archetype-generation</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <properties>
+                <skipTests>false</skipTests>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>

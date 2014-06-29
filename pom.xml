@@ -13,23 +13,55 @@
     <name>Minium - Test</name>
 
     <modules>
-        <module>minium-cucumber-rhino</module>
-        <module>minium-cucumber-rhino-archetype</module>
+        <module>minium-script-test</module>
+        <module>minium-script-cucumber</module>
+        <module>minium-script-cucumber-archetype</module>
+        <module>minium-script-jasmine</module>
+        <module>minium-script-jasmine-archetype</module>
     </modules>
+
+    <properties>
+        <cucumber.version>1.1.5</cucumber.version>
+
+        <maven.verifier.version>1.5</maven.verifier.version>
+        <junit.version>4.11</junit.version>
+        <assertj.version>1.6.1</assertj.version>
+        <mockito.version>1.8.5</mockito.version>
+    </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>info.cukes</groupId>
                 <artifactId>cucumber-rhino</artifactId>
-                <version>1.1.5</version>
+                <version>${cucumber.version}</version>
             </dependency>
             <dependency>
                 <groupId>info.cukes</groupId>
                 <artifactId>cucumber-junit</artifactId>
-                <version>1.1.5</version>
+                <version>${cucumber.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.vilt-group.minium</groupId>
+                <artifactId>minium-script-test</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.maven.shared</groupId>
+                <artifactId>maven-verifier</artifactId>
+                <version>${maven.verifier.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.assertj</groupId>
+                <artifactId>assertj-core</artifactId>
+                <version>${assertj.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
-    
+
 </project>

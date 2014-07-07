@@ -40,8 +40,8 @@
   
   expect.Assertion.prototype.val = function (expected) {
     return this._assertElements(this.obj.withValue(expected),
-      function(){ return 'expected ' + this.obj + ' to have value "' + expected + '" but got "' + this.obj.attr(name) + '"' },
-      function(){ return 'expected ' + this.obj + ' to not have value "' + expected + '"' }
+      function(){ return 'expected ' + this.obj + ' to have val ' + expected + '" but got ' + this.obj.val() + '"' },
+      function(){ return 'expected ' + this.obj + ' to not have val' + expected + '"' }
     );
   };
 

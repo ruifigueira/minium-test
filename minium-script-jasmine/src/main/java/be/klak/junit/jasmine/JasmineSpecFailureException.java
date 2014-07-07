@@ -1,6 +1,8 @@
 package be.klak.junit.jasmine;
 
 import org.mozilla.javascript.NativeObject;
+import org.mozilla.javascript.ScriptableObject;
+import org.mozilla.javascript.UniqueTag;
 
 class JasmineSpecFailureException extends Exception {
 
@@ -10,9 +12,13 @@ class JasmineSpecFailureException extends Exception {
     // private ScriptableObject trace;
 
     public JasmineSpecFailureException(NativeObject specResultItem) {
-        // TODO extract a stracktrace from rhino trace
-        // this.trace = (ScriptableObject) specResultItem.get("trace", specResultItem);
-        this.message = specResultItem.get("message", specResultItem).toString();
+    	ScriptableObject trace = (ScriptableObject) specResultItem.get("trace", specResultItem);
+    	Object stack = trace.get("stack", trace);
+    	if(stack.equals(UniqueTag.NOT_FOUND)) {
+    		this.message = specResultItem.get("message", specResultItem).toString();
+    	} else {
+    		this.message = specResultItem.get("message", specResultItem).toString() + stack;
+    	}
     }
 
     @Override
@@ -24,5 +30,6 @@ class JasmineSpecFailureException extends Exception {
     public StackTraceElement[] getStackTrace() {
         return super.getStackTrace();
     }
-
+    
+    
 }

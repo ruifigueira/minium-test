@@ -9,6 +9,7 @@
     </parent>
 
     <artifactId>minium-test</artifactId>
+  <version>0.9.5-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>Minium - Test</name>
     

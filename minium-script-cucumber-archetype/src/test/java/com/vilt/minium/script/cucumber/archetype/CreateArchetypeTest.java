@@ -79,8 +79,10 @@ public class CreateArchetypeTest {
 
         // verify output
         verifier.verifyTextInLog("Running my.archetype.MyArchetypeTest");
-        verifier.verifyTextInLog("Scenario: Search something in google");
-        verifier.verifyTextInLog(format("%s/%s.feature",     Constants.TEST_GROUP_ID.replace('.', '/'), Constants.TEST_FEATURE));
-        verifier.verifyTextInLog(format("%s/%s_stepdefs.js", Constants.TEST_GROUP_ID.replace('.', '/'), Constants.TEST_FEATURE));
+        verifier.verifyTextInLog("Tests run: 12, Failures: 0, Errors: 0, Skipped: 0");
+
+        // ensure files exist
+        verifier.assertFilePresent(format("src/test/resources/%s/%s.feature",     Constants.TEST_GROUP_ID.replace('.', '/'), Constants.TEST_FEATURE));
+        verifier.assertFilePresent(format("src/test/resources/%s/%s_stepdefs.js", Constants.TEST_GROUP_ID.replace('.', '/'), Constants.TEST_FEATURE));
     }
 }

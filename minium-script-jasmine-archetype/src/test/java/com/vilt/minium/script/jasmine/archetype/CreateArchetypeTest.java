@@ -75,9 +75,8 @@ public class CreateArchetypeTest {
         verifier.setAutoclean(true);
         verifier.executeGoal("verify");
 
-        verifier.verifyErrorFreeLog();
-
         // verify output
+        verifier.verifyErrorFreeLog();
         verifier.verifyTextInLog("Running my.archetype.MyArchetypeTest");
         verifier.assertFilePresent(format("src/test/resources/specs/%s/%s_spec.js", Constants.TEST_GROUP_ID.replace('.', '/'), Constants.TEST_SPEC_NAME));
     }

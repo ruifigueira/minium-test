@@ -1,0 +1,15 @@
+{
+    "services" : {
+        "chrome-driver-service" : {
+            "type" : "chrome"
+        }
+    },
+    "webDrivers" : {
+        "chrome" : {
+            "service" : "chrome-driver-service",
+            "desiredCapabilities" : {
+                "browserName" : "chrome"
+            }
+        }
+    } 
+}

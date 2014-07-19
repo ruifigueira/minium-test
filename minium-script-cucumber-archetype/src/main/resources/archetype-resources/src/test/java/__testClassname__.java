@@ -16,7 +16,7 @@ import cucumber.api.CucumberOptions;
 
 @RunWith(MiniumCucumber.class)
 @CucumberOptions(
-        format = { "pretty", "html:target/cucumber-html-report",  "json:target/cucumber-json-report.json" },
+        format = { "progress", "html:target/cucumber-html-report",  "json:target/cucumber-json-report.json" },
         glue   = { "classpath:cucumber/runtime/minium", "classpath:${packageInPathFormat}" }
 )
 @ContextConfiguration(classes = TestConfig.class)

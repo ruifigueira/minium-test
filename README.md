@@ -4,8 +4,8 @@ Minium - Test Framework
 Minium test framework supports tests written in javascript (with Rhino) and integrated with JUnit.
 It is available in two flavors:
 
-* Cucumber
-* Jasmine
+* [Cucumber](#cucumber)
+* [Jasmine](#jasmine)
 
 Cucumber
 --------

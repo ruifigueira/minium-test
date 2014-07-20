@@ -26,6 +26,7 @@ mvn archetype:generate \
   -Dversion=1.0-SNAPSHOT \
   -Dfeature=test_my_archetype \
   -DtestClassname=MyArchetypeTest
+  -DinteractiveMode=false
 ```
 
 That will create a project `my-archetype-test` with a JUnit structure ready to run. To launch the tests:
@@ -54,6 +55,7 @@ mvn archetype:generate \
   -Dversion=1.0-SNAPSHOT \
   -DspecName=test_my_archetype \
   -DtestClassname=MyArchetypeTest
+  -DinteractiveMode=false
 ```
 
 That will create a project `my-archetype-test` with a JUnit structure ready to run. To launch the tests:

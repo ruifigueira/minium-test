@@ -35,7 +35,7 @@ mvn verify
 
 **Note:** Ensure [chromedriver](https://code.google.com/p/selenium/wiki/ChromeDriver) is installed and configured.
 
-You can then edit the stories
+You can then add scenarios in `src/test/resources/my/archetype/test_my_archetype.feature` and code for new steps in `src/test/resources/my/archetype/test_my_archetype_stepdefs.js`.
 
 Jasmine
 -------
@@ -55,3 +55,15 @@ mvn archetype:generate \
   -DspecName=test_my_archetype \
   -DtestClassname=MyArchetypeTest
 ```
+
+That will create a project `my-archetype-test` with a JUnit structure ready to run. To launch the tests:
+
+```sh
+cd my-archetype-test
+mvn verify
+```
+
+**Note:** Ensure [chromedriver](https://code.google.com/p/selenium/wiki/ChromeDriver) is installed and configured.
+
+You can then add tests to the spec found in `src/test/resources/specs/my/archetype/test_my_archetype_spec.js`.
+

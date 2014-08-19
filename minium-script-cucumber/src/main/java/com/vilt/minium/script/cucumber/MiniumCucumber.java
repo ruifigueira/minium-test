@@ -34,13 +34,13 @@ import cucumber.api.CucumberOptions;
 import cucumber.runtime.Runtime;
 import cucumber.runtime.RuntimeOptions;
 import cucumber.runtime.RuntimeOptionsFactory;
+import cucumber.runtime.SummaryPrinter;
 import cucumber.runtime.io.MultiLoader;
 import cucumber.runtime.io.ResourceLoader;
 import cucumber.runtime.junit.Assertions;
 import cucumber.runtime.junit.FeatureRunner;
 import cucumber.runtime.junit.JUnitReporter;
 import cucumber.runtime.model.CucumberFeature;
-import cucumber.runtime.snippets.SummaryPrinter;
 
 /**
  * Classes annotated with {@code @RunWith(Cucumber.class)} will run a Cucumber Feature.

@@ -39,7 +39,7 @@ import cucumber.runtime.io.ResourceLoader;
 import cucumber.runtime.rhino.JavaScriptSnippet;
 import cucumber.runtime.rhino.RhinoHookDefinition;
 import cucumber.runtime.rhino.RhinoStepDefinition;
-import cucumber.runtime.snippets.FunctionNameSanitizer;
+import cucumber.runtime.snippets.FunctionNameGenerator;
 import cucumber.runtime.snippets.SnippetGenerator;
 
 public class MiniumBackend implements Backend {
@@ -94,8 +94,8 @@ public class MiniumBackend implements Backend {
     }
 
     @Override
-    public String getSnippet(Step step, FunctionNameSanitizer functionNameSanitizer) {
-        return snippetGenerator.getSnippet(step, functionNameSanitizer);
+    public String getSnippet(Step step, FunctionNameGenerator functionNameGenerator) {
+        return snippetGenerator.getSnippet(step, functionNameGenerator);
     }
 
     private StackTraceElement jsLocation() {

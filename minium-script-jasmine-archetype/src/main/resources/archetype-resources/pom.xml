@@ -10,7 +10,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     
-        <minium.version>${version}</minium.version>
+        <minium.version>0.9.4</minium.version>
         <selenium.version>2.42.2</selenium.version>
         <logback.version>1.0.9</logback.version>
     </properties>

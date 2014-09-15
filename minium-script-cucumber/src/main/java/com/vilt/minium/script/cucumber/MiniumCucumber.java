@@ -18,25 +18,22 @@ package com.vilt.minium.script.cucumber;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.junit.runner.Description;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.ParentRunner;
 import org.junit.runners.model.InitializationError;
-import org.mozilla.javascript.Context;
-import org.mozilla.javascript.tools.shell.Global;
 
-import com.vilt.minium.script.test.impl.MiniumRhinoTestsSupport;
+import com.google.common.collect.ImmutableList;
 
 import cucumber.api.CucumberOptions;
 import cucumber.runtime.Runtime;
 import cucumber.runtime.RuntimeOptions;
 import cucumber.runtime.RuntimeOptionsFactory;
-import cucumber.runtime.SummaryPrinter;
 import cucumber.runtime.io.MultiLoader;
 import cucumber.runtime.io.ResourceLoader;
+import cucumber.runtime.java.JavaBackend;
 import cucumber.runtime.junit.Assertions;
 import cucumber.runtime.junit.FeatureRunner;
 import cucumber.runtime.junit.JUnitReporter;
@@ -59,10 +56,6 @@ public class MiniumCucumber extends ParentRunner<FeatureRunner> {
     private final List<FeatureRunner> children = new ArrayList<FeatureRunner>();
     private final Runtime runtime;
 
-    private MiniumBackend backend;
-    private Global scope;
-    private Context cx;
-
     /**
      * Constructor called by JUnit.
      *
@@ -83,14 +76,10 @@ public class MiniumCucumber extends ParentRunner<FeatureRunner> {
 
         ResourceLoader resourceLoader = new MultiLoader(classLoader);
 
-        cx = Context.enter();
-        scope = new Global(cx);
+        MiniumBackend backend = new MiniumBackend(resourceLoader, getTestClass().getJavaClass());
+        JavaBackend javaBackend = new JavaBackend(resourceLoader);
 
-        MiniumRhinoTestsSupport helper = new MiniumRhinoTestsSupport(classLoader, getTestClass().getJavaClass(), cx, scope);
-        helper.initialize();
-
-        backend = new MiniumBackend(resourceLoader, cx, scope);
-        runtime = new Runtime(resourceLoader, classLoader, Collections.singleton(backend), runtimeOptions);
+        runtime = new Runtime(resourceLoader, classLoader, ImmutableList.of(backend, javaBackend), runtimeOptions);
 
         jUnitReporter = new JUnitReporter(runtimeOptions.reporter(classLoader), runtimeOptions.formatter(classLoader), runtimeOptions.isStrict());
         addChildren(runtimeOptions.cucumberFeatures(resourceLoader));
@@ -116,7 +105,7 @@ public class MiniumCucumber extends ParentRunner<FeatureRunner> {
         super.run(notifier);
         jUnitReporter.done();
         jUnitReporter.close();
-        new SummaryPrinter(System.out).print(runtime);
+        runtime.printSummary();
     }
 
     private void addChildren(List<CucumberFeature> cucumberFeatures) throws InitializationError {

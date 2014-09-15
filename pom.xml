@@ -48,6 +48,11 @@
                 <version>${cucumber.version}</version>
             </dependency>
             <dependency>
+                <groupId>info.cukes</groupId>
+                <artifactId>cucumber-spring</artifactId>
+                <version>${cucumber.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.vilt-group.minium</groupId>
                 <artifactId>minium-script-test</artifactId>
                 <version>${project.version}</version>

@@ -32,7 +32,7 @@
   };
   
   expect.Assertion.prototype.size = function (n) {
-    return this._assertElements(this.obj.evalWebElements("$(this).length === " + n + " ? $(this) : $()"),
+    return this._assertElements(this.obj.evalWebElements("$(this).length === " + n + " ? $('body') : $()"),
       function(){ return 'expected ' + this.obj + ' to have size ' + n + ' but got ' + this.obj.size() },
       function(){ return 'expected ' + this.obj + ' to not have size ' + n }
     );

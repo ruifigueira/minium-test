@@ -25,10 +25,12 @@ import java.util.List;
 import org.mozilla.javascript.Context;
 import org.mozilla.javascript.Function;
 import org.mozilla.javascript.NativeFunction;
+import org.mozilla.javascript.ScriptableObject;
 import org.mozilla.javascript.regexp.NativeRegExp;
 import org.mozilla.javascript.tools.shell.Global;
 
 import com.google.common.base.Throwables;
+import com.vilt.minium.script.test.impl.MiniumRhinoTestsSupport;
 
 import cucumber.runtime.Backend;
 import cucumber.runtime.CucumberException;
@@ -50,19 +52,32 @@ public class MiniumBackend implements Backend {
     private List<String> gluePaths;
     private Glue glue;
     private Context cx;
-    private Global scope;
+    private ScriptableObject scope;
 
-    public MiniumBackend(ResourceLoader resourceLoader, Context cx, Global scope) throws IOException {
+    public MiniumBackend(ResourceLoader resourceLoader) throws IOException {
+        this(resourceLoader, null);
+    }
+
+    public MiniumBackend(ResourceLoader resourceLoader, ClassLoader classLoader, Class<?> clazz) throws IOException {
         try {
             this.resourceLoader = resourceLoader;
-            this.cx = cx;
-            this.scope = scope;
+            this.cx = Context.enter();
+            this.scope = new Global(cx);
             scope.put("jsBackend", scope, this);
             InputStreamReader dsl = new InputStreamReader(getClass().getResourceAsStream(JS_DSL), "UTF-8");
             cx.evaluateReader(scope, dsl, JS_DSL, 1, null);
+
+            if (clazz != null) {
+                MiniumRhinoTestsSupport helper = new MiniumRhinoTestsSupport(classLoader, clazz, cx, scope);
+                helper.initialize();
+            }
         } catch (Exception e) {
             throw Throwables.propagate(e);
         }
+    }
+
+    public MiniumBackend(ResourceLoader resourceLoader, Class<?> clazz) throws IOException {
+        this(resourceLoader, clazz.getClassLoader(), clazz);
     }
 
     @Override
@@ -103,6 +118,7 @@ public class MiniumBackend implements Backend {
         StackTraceElement[] stackTraceElements = t.getStackTrace();
         for (StackTraceElement stackTraceElement : stackTraceElements) {
             String fileName = stackTraceElement.getFileName();
+            if (fileName == null) continue;
             boolean js = fileName.endsWith(".js");
             for (String gluePath : gluePaths) {
                 boolean inScriptPath = packageName(fileName).startsWith(packageName(gluePath));

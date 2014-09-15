@@ -28,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 
 import com.vilt.minium.DefaultWebElementsDriver;
 
@@ -37,6 +38,7 @@ public class WebElementsDriverConfig {
     private static final Logger LOGGER = LoggerFactory.getLogger(WebElementsDriverConfig.class);
 
     @Bean(destroyMethod = "quit")
+    @Lazy
     public DefaultWebElementsDriver wd() throws MalformedURLException {
         String remoteWebDriverUrl = System.getProperty("remote.web.driver.url");
 

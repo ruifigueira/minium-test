@@ -103,13 +103,14 @@ public class MiniumBackend implements Backend {
         StackTraceElement[] stackTraceElements = t.getStackTrace();
         for (StackTraceElement stackTraceElement : stackTraceElements) {
             String fileName = stackTraceElement.getFileName();
-            boolean js = fileName.endsWith(".js");
-            for (String gluePath : gluePaths) {
-                boolean inScriptPath = packageName(fileName).startsWith(packageName(gluePath));
-                boolean hasLine = stackTraceElement.getLineNumber() != -1;
-                if (js && inScriptPath && hasLine) {
-                    return new StackTraceElement(stackTraceElement.getClassName(), stackTraceElement.getMethodName(), fileName.replace('\\', '/'), stackTraceElement.getLineNumber());
-                }
+            if (fileName != null && fileName.endsWith(".js")) {
+	            for (String gluePath : gluePaths) {
+	                boolean inScriptPath = packageName(fileName).startsWith(packageName(gluePath));
+	                boolean hasLine = stackTraceElement.getLineNumber() != -1;
+	                if (inScriptPath && hasLine) {
+	                    return new StackTraceElement(stackTraceElement.getClassName(), stackTraceElement.getMethodName(), fileName.replace('\\', '/'), stackTraceElement.getLineNumber());
+	                }
+	            }
             }
         }
         throw new RuntimeException("Couldn't find location for step definition");

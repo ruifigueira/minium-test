@@ -25,4 +25,5 @@ import java.lang.annotation.Target;
 public @interface JsVariable {
     public String value();
     public abstract String resource() default "";
+    public abstract String resourceBean() default "";
 }

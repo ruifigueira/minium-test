@@ -24,7 +24,6 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import org.apache.commons.io.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.mozilla.javascript.Context;
@@ -32,6 +31,8 @@ import org.mozilla.javascript.Scriptable;
 import org.mozilla.javascript.json.JsonParser;
 import org.mozilla.javascript.json.JsonParser.ParseException;
 import org.mozilla.javascript.tools.shell.Global;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -40,6 +41,7 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.ReflectionUtils.FieldCallback;
 
+import com.google.common.base.Charsets;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.vilt.minium.script.MiniumContextLoader;
@@ -65,12 +67,12 @@ public class MiniumRhinoTestsSupport {
         }
         new MiniumContextLoader(classLoader).load(cx, scope);
 
-        TestContextManager contextManager = new TestContextManager(testClass);
+        MiniumRhinoTestContextManager contextManager = new MiniumRhinoTestContextManager(testClass);
         contextManager.registerTestExecutionListeners(new DependencyInjectionTestExecutionListener());
         createTestClassInstance(contextManager);
     }
 
-    protected Object createTestClassInstance(TestContextManager contextManager) {
+    protected Object createTestClassInstance(final MiniumRhinoTestContextManager contextManager) {
         try {
             final Object testInstance = getInstance();
             contextManager.prepareTestInstance(testInstance);
@@ -87,7 +89,7 @@ public class MiniumRhinoTestsSupport {
                     String varName = jsVariable.value();
                     checkNotNull(varName, "@JsVariable.value() should not be null");
                     Object fieldVal = f.get(testInstance);
-                    Object val = getVal(jsVariable, f.getType(), fieldVal);
+                    Object val = getVal(contextManager, jsVariable, f.getType(), fieldVal);
                     put(scope, varName, val);
 
                     if (fieldVal == null && val != null) {
@@ -104,13 +106,11 @@ public class MiniumRhinoTestsSupport {
         }
     }
 
-    protected Object getVal(JsVariable jsVariable, Class<?> clazz, Object object) {
+    protected Object getVal(MiniumRhinoTestContextManager contextManager, JsVariable jsVariable, Class<?> clazz, Object object) {
         try {
-            String resourcePath = jsVariable.resource();
-            if (StringUtils.isNotEmpty(resourcePath)) {
-                Resource resource = new DefaultResourceLoader(classLoader).getResource(resourcePath);
-                checkState(resource.exists() && resource.isReadable());
+            Resource resource = getResource(contextManager, jsVariable);
 
+            if (resource != null) {
                 if (clazz == String.class) {
                     InputStream is = resource.getInputStream();
                     try {
@@ -131,6 +131,20 @@ public class MiniumRhinoTestsSupport {
         } catch (ParseException e) {
             throw propagate(e);
         }
+    }
+
+    protected Resource getResource(MiniumRhinoTestContextManager contextManager, JsVariable jsVariable) {
+        String resourcePath = jsVariable.resource();
+        Resource resource = null;
+        if (StringUtils.isNotEmpty(resourcePath)) {
+            resource = new DefaultResourceLoader(classLoader).getResource(resourcePath);
+        } else if (StringUtils.isNotEmpty(jsVariable.resourceBean())) {
+            resource = contextManager.getContext().getBean(jsVariable.resourceBean(), Resource.class);
+        }
+        if (resource == null) return null;
+
+        checkState(resource.exists() && resource.isReadable());
+        return resource;
     }
 
     protected void put(Scriptable scope, String name, Object value) {
@@ -165,6 +179,21 @@ public class MiniumRhinoTestsSupport {
             return testClass.newInstance();
         } catch (Exception e) {
             throw Throwables.propagate(e);
+        }
+    }
+
+    class MiniumRhinoTestContextManager extends TestContextManager {
+
+        public MiniumRhinoTestContextManager(Class<?> testClass) {
+            super(testClass);
+        }
+
+        public ConfigurableListableBeanFactory getBeanFactory() {
+            return getContext().getBeanFactory();
+        }
+
+        public ConfigurableApplicationContext getContext() {
+            return (ConfigurableApplicationContext) getTestContext().getApplicationContext();
         }
     }
 }

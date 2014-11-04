@@ -10,6 +10,7 @@
         <requiredProperty key="testClassname">
             <defaultValue>MyFeatureTest</defaultValue>
         </requiredProperty>
+        <requiredProperty key="archetypeVersion"></requiredProperty>        
     </requiredProperties>
 
     <fileSets>

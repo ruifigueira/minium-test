@@ -22,7 +22,7 @@ public class ${testClassname} {
     @JsVariable("wd")
     private DefaultWebElementsDriver wd;
 
-    @JsVariable(value = "config", resource = "classpath:config/dev.json")
+    @JsVariable(value = "config", resourceBean = "configFile")
     private Scriptable config;
 
 }

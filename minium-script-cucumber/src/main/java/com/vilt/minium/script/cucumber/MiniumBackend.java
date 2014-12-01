@@ -15,7 +15,6 @@
  */
 package com.vilt.minium.script.cucumber;
 
-import static cucumber.runtime.io.MultiLoader.packageName;
 import gherkin.formatter.model.Step;
 
 import java.io.IOException;
@@ -118,14 +117,12 @@ public class MiniumBackend implements Backend {
         Throwable t = new Throwable();
         StackTraceElement[] stackTraceElements = t.getStackTrace();
         for (StackTraceElement stackTraceElement : stackTraceElements) {
-            String fileName = stackTraceElement.getFileName();
-            if (fileName != null && fileName.endsWith(".js")) {
-                for (String gluePath : gluePaths) {
-                    boolean inScriptPath = packageName(fileName).startsWith(packageName(gluePath));
-                    boolean hasLine = stackTraceElement.getLineNumber() != -1;
-                    if (inScriptPath && hasLine) {
-                        return new StackTraceElement(stackTraceElement.getClassName(), stackTraceElement.getMethodName(), fileName.replace('\\', '/'), stackTraceElement.getLineNumber());
-                    }
+            boolean js = stackTraceElement.getFileName().endsWith(".js");
+            if (js) {
+                boolean isDsl = stackTraceElement.getFileName().endsWith(JS_DSL);
+                boolean hasLine = stackTraceElement.getLineNumber() != -1;
+                if (!isDsl && hasLine) {
+                    return stackTraceElement;
                 }
             }
         }

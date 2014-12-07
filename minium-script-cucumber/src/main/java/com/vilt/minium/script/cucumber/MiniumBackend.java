@@ -49,7 +49,6 @@ public class MiniumBackend implements Backend {
     private static final String JS_DSL = "/cucumber/runtime/rhino/dsl.js";
     private final SnippetGenerator snippetGenerator = new SnippetGenerator(new JavaScriptSnippet());
     private final ResourceLoader resourceLoader;
-    private List<String> gluePaths;
     private Glue glue;
     private Context cx;
     private ScriptableObject scope;
@@ -83,7 +82,6 @@ public class MiniumBackend implements Backend {
     @Override
     public void loadGlue(Glue glue, List<String> gluePaths) {
         this.glue = glue;
-        this.gluePaths = gluePaths;
         for (String gluePath : gluePaths) {
             for (Resource resource : resourceLoader.resources(gluePath, ".js")) {
                 try {
@@ -117,9 +115,10 @@ public class MiniumBackend implements Backend {
         Throwable t = new Throwable();
         StackTraceElement[] stackTraceElements = t.getStackTrace();
         for (StackTraceElement stackTraceElement : stackTraceElements) {
-            boolean js = stackTraceElement.getFileName().endsWith(".js");
+            String fileName = stackTraceElement.getFileName();
+            boolean js = fileName == null ? false : fileName.endsWith(".js");
             if (js) {
-                boolean isDsl = stackTraceElement.getFileName().endsWith(JS_DSL);
+                boolean isDsl = fileName.endsWith(JS_DSL);
                 boolean hasLine = stackTraceElement.getLineNumber() != -1;
                 if (!isDsl && hasLine) {
                     return stackTraceElement;

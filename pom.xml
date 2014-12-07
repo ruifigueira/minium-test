@@ -27,7 +27,7 @@
     </modules>
 
     <properties>
-        <cucumber.version>1.2.0</cucumber.version>
+        <cucumber.version>1.1.8</cucumber.version>
 
         <maven.verifier.version>1.5</maven.verifier.version>
         <assertj.version>1.7.0</assertj.version>
